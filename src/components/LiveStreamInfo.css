@@ -1,0 +1,118 @@
+.live-stream-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.stream-status-card,
+.stream-metrics-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1rem 0;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.status-indicator {
+    font-size: 0.75rem;
+}
+
+.status-indicator.active {
+    color: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.inactive {
+    color: #f44336;
+}
+
+.status-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.status-icon {
+    color: #00b4d8;
+    font-size: 1rem;
+}
+
+.status-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.status-text .label {
+    color: #a0a0a0;
+    font-size: 0.8rem;
+}
+
+.status-text .value {
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.stream-metrics-card h3 {
+    margin: 0 0 1rem 0;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    text-align: center;
+}
+
+.metric-value {
+    color: #00b4d8;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.metric-label {
+    color: #a0a0a0;
+    font-size: 0.8rem;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .live-stream-info {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+} 
