@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FaPlay, FaClock, FaCalendarAlt, FaVideo } from 'react-icons/fa';
+import { FaPlay, FaClock, FaCalendarAlt, FaVideo, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import api from '../services/api';
 import '../styles/RecordingsList.css';
 
 const RecordingsList = ({ onSelectRecording, streamState }) => {
@@ -8,17 +8,51 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(Date.now());
+  const [expandedDates, setExpandedDates] = useState(new Set());
 
   const fetchRecordings = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/recordings`);
+      const response = await api.get('/recordings');
       setRecordings(response.data.recordings);
+      // Initially expand today's recordings
+      const today = new Date().toLocaleDateString();
+      setExpandedDates(new Set([today]));
       setLoading(false);
       setError(null);
     } catch (err) {
+      console.error('Error fetching recordings:', err);
       setError('Failed to fetch recordings');
       setLoading(false);
     }
+  };
+
+  // Group recordings by date
+  const groupRecordingsByDate = () => {
+    const groups = {};
+    recordings.forEach(recording => {
+      const date = new Date(recording.created_at).toLocaleDateString();
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(recording);
+    });
+    
+    // Sort recordings within each group by time (newest first)
+    Object.values(groups).forEach(group => {
+      group.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    });
+    
+    return groups;
+  };
+
+  const toggleDateExpansion = (date) => {
+    const newExpandedDates = new Set(expandedDates);
+    if (newExpandedDates.has(date)) {
+      newExpandedDates.delete(date);
+    } else {
+      newExpandedDates.add(date);
+    }
+    setExpandedDates(newExpandedDates);
   };
 
   // Initial fetch
@@ -51,11 +85,7 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
   const handlePlayRecording = async (recording) => {
     try {
       console.log('Fetching stream for recording:', recording);
-      
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/recordings/stream/${recording.id}`
-      );
-      
+      const response = await api.get(`/recordings/stream/${recording.id}`);
       console.log('Stream response:', response.data);
       
       const recordingWithStream = {
@@ -80,6 +110,32 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toLocaleDateString() === today.toLocaleDateString()) {
+      return 'Today';
+    } else if (date.toLocaleDateString() === yesterday.toLocaleDateString()) {
+      return 'Yesterday';
+    }
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const formatTime = (dateString) => {
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
   if (loading) return (
     <div className="recordings-loading">
       Loading recordings...
@@ -92,6 +148,9 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
     </div>
   );
 
+  const groupedRecordings = groupRecordingsByDate();
+  const dates = Object.keys(groupedRecordings).sort((a, b) => new Date(b) - new Date(a));
+
   return (
     <div className="recordings-container">
       <h2>
@@ -99,36 +158,53 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
         Recorded Streams
       </h2>
       <div className="recordings-list">
-        {recordings.length === 0 ? (
+        {dates.length === 0 ? (
           <div className="recordings-empty">
             <FaVideo size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
             <p>No recordings available</p>
           </div>
         ) : (
-          recordings.map((recording) => (
-            <div key={recording.id} className="recording-item">
-              <div className="recording-info">
-                <h3>{recording.stream_name}</h3>
-                <p>
-                  <FaCalendarAlt style={{ marginRight: '0.5rem' }} />
-                  {new Date(recording.created_at).toLocaleString()}
-                </p>
-                {recording.duration && (
-                  <p>
-                    <FaClock style={{ marginRight: '0.5rem' }} />
-                    Duration: {formatDuration(recording.duration)}
-                  </p>
-                )}
+          dates.map(date => (
+            <div key={date} className="recordings-date-group">
+              <div 
+                className="date-header"
+                onClick={() => toggleDateExpansion(date)}
+              >
+                <h3>
+                  <FaCalendarAlt style={{ marginRight: '0.75rem' }} />
+                  {formatDate(date)}
+                </h3>
+                {expandedDates.has(date) ? <FaChevronUp /> : <FaChevronDown />}
               </div>
-              <div className="recording-actions">
-                <button 
-                  onClick={() => handlePlayRecording(recording)}
-                  className="view-button"
-                >
-                  <FaPlay />
-                  Play Recording
-                </button>
-              </div>
+              {expandedDates.has(date) && (
+                <div className="date-recordings">
+                  {groupedRecordings[date].map((recording) => (
+                    <div key={recording.id} className="recording-item">
+                      <div className="recording-info">
+                        <div className="recording-header">
+                          <h4>{recording.stream_name}</h4>
+                          <span className="recording-time">{formatTime(recording.created_at)}</span>
+                        </div>
+                        {recording.duration && (
+                          <p className="recording-duration">
+                            <FaClock style={{ marginRight: '0.5rem' }} />
+                            Duration: {formatDuration(recording.duration)}
+                          </p>
+                        )}
+                      </div>
+                      <div className="recording-actions">
+                        <button 
+                          onClick={() => handlePlayRecording(recording)}
+                          className="view-button"
+                        >
+                          <FaPlay />
+                          Play Recording
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))
         )}
