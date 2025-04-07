@@ -84,9 +84,7 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
 
   const handlePlayRecording = async (recording) => {
     try {
-      console.log('Fetching stream for recording:', recording);
       const response = await api.get(`/recordings/stream/${recording.id}`);
-      console.log('Stream response:', response.data);
       
       const recordingWithStream = {
         ...recording,
@@ -95,7 +93,6 @@ const RecordingsList = ({ onSelectRecording, streamState }) => {
         mimeType: response.data.mime_type
       };
       
-      console.log('Passing recording to player:', recordingWithStream);
       onSelectRecording(recordingWithStream);
     } catch (err) {
       console.error('Error fetching video stream:', err);

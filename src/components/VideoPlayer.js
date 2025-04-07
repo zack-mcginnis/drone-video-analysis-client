@@ -30,7 +30,6 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
         onStreamStateChange(true);
       }
     } catch (error) {
-      console.log('Play attempted before stream was ready, waiting...');
       if (playAttemptRef.current >= 2) {
         console.error('Multiple play attempts failed:', error);
         setError('Failed to start playback. Please try again.');
@@ -111,26 +110,20 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
           });
 
           hls.on(Hls.Events.MANIFEST_LOADING, () => {
-            console.log('HLS: Manifest loading started');
+            setIsLoading(true);
           });
 
-          hls.on(Hls.Events.MANIFEST_LOADED, (event, data) => {
-            console.log('HLS: Manifest loaded:', data);
+          hls.on(Hls.Events.MANIFEST_LOADED, () => {
+            setStreamReady(true);
           });
 
-          hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-            console.log('HLS: Manifest parsed:', data);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
             setStreamReady(true);
             setIsLoading(false);
             attemptPlay();
           });
 
-          hls.on(Hls.Events.FRAG_LOADING, (event, data) => {
-            console.log('HLS: Loading fragment:', data.frag.url);
-          });
-
           hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
-            console.log('HLS: Fragment loaded:', data.frag.url);
             setError(null);
             playAttemptRef.current = 0;
           });
@@ -148,7 +141,6 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
         } else {
           video.src = sourceUrl;
           video.addEventListener('loadedmetadata', () => {
-            console.log('Video metadata loaded (native HLS)');
             setStreamReady(true);
             setIsLoading(false);
             attemptPlay();
@@ -175,8 +167,6 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
     };
 
     const destroyPlayer = () => {
-      console.log('Destroying player');
-      isDestroyed = true;
       if (retryTimeout) {
         clearTimeout(retryTimeout);
       }
@@ -195,12 +185,6 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
         onStreamStateChange(false);
       }
     };
-
-    console.log('VideoPlayer effect running with:', {
-      isLiveMode,
-      selectedRecording,
-      hasHlsUrl: !!hlsUrl
-    });
 
     initializePlayer();
 
