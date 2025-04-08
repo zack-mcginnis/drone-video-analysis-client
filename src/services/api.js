@@ -27,14 +27,6 @@ export const setupApiAuth = async (getToken) => {
                 
                 const token = claims.__raw || claims.access_token;
                 
-                // Debug token format
-                console.log('Token parts:', token.split('.').length);
-                console.log('Token structure:', {
-                    header: token.split('.')[0],
-                    payload: token.split('.')[1],
-                    // Don't log the full token for security
-                });
-                
                 config.headers.Authorization = `Bearer ${token}`;
             } catch (error) {
                 console.error('Error getting access token:', error);
