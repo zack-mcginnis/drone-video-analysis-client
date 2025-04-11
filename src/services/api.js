@@ -39,4 +39,19 @@ export const setupApiAuth = async (getToken) => {
     );
 };
 
+export const postLogin = async (email, auth0Id) => {
+    return api.post('/users/post-login', {
+        email,
+        auth0_id: auth0Id
+    });
+};
+
+export const createDevice = async (name) => {
+    return api.post('/devices', { name });
+};
+
+export const deleteDevice = async (deviceId) => {
+    return api.delete(`/devices/${deviceId}`);
+};
+
 export default api; 

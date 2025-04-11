@@ -4,7 +4,7 @@ import '../styles/VideoPlayer.css';
 // Import icons
 import { FaBroadcastTower } from 'react-icons/fa';
 
-const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamStateChange }) => {
+const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchToLive, onStreamStateChange }) => {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -53,7 +53,15 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
       playAttemptRef.current = 0;
 
       try {
-        const sourceUrl = isLiveMode ? hlsUrl : selectedRecording?.streamUrl;
+        const device_key = selectedDevice?.stream_key;
+        if (isLiveMode && !device_key) {
+          setError('No device selected');
+          setIsLoading(false);
+          return;
+        }
+
+        const hlsUrlForSelectedDevice = isLiveMode ? `${hlsUrl}/hls/${device_key}.m3u8` : selectedRecording?.streamUrl;
+        const sourceUrl = hlsUrlForSelectedDevice;
         const isHLS = isLiveMode || (selectedRecording?.format === 'hls');
 
         if (!sourceUrl) {
@@ -191,7 +199,7 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, onSwitchToLive, onStreamSt
     return () => {
       destroyPlayer();
     };
-  }, [isLiveMode, selectedRecording, hlsUrl, onStreamStateChange]);
+  }, [isLiveMode, selectedRecording, selectedDevice, hlsUrl, onStreamStateChange]);
 
   return (
     <div className="video-player-container">

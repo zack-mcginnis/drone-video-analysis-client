@@ -1,0 +1,217 @@
+.devices-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.devices-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.devices-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.add-device-button,
+.add-first-device-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-device-button:hover,
+.add-first-device-button:hover {
+  background-color: #357abd;
+}
+
+.add-first-device-button {
+  margin-top: 1.5rem;
+}
+
+.devices-container h2 {
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.devices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.device-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.device-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.device-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.device-title {
+  display: flex;
+  align-items: center;
+}
+
+.device-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #4a90e2;
+}
+
+.device-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.device-info {
+  color: #666;
+}
+
+.stream-key-container,
+.rtmp-url-container {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.rtmp-url-container {
+  margin-top: 1rem;
+}
+
+.stream-key-label,
+.rtmp-url-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.key-icon,
+.server-icon {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.stream-key-value,
+.rtmp-url-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.stream-key-value code,
+.rtmp-url-value code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #24292e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0.25rem;
+  position: relative;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.copy-button:hover {
+  color: #4a90e2;
+}
+
+.copied-tooltip {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: #4a90e2;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+.copied-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 10px;
+  border: 5px solid transparent;
+  border-top-color: #4a90e2;
+}
+
+.no-devices {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-devices h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.no-devices p {
+  color: #666;
+  margin: 0;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.device-card:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  color: #c82333;
+} 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import LogoutButton from './LogoutButton';
 import './Navigation.css';
-import { FaVideo, FaHistory, FaUser, FaCog, FaBars, FaTimes } from 'react-icons/fa';
+import { FaVideo, FaHistory, FaUser, FaCog, FaBars, FaTimes, FaMicrochip } from 'react-icons/fa';
 
 const Navigation = ({ activeSection, onSectionChange }) => {
     const { user } = useAuth0();
@@ -11,6 +11,7 @@ const Navigation = ({ activeSection, onSectionChange }) => {
     const sections = [
         { id: 'live', label: 'Live Stream', icon: <FaVideo /> },
         { id: 'recordings', label: 'Recorded Streams', icon: <FaHistory /> },
+        { id: 'devices', label: 'Devices', icon: <FaMicrochip /> },
         { id: 'user', label: 'User Profile', icon: <FaUser /> },
         { id: 'settings', label: 'Settings', icon: <FaCog /> }
     ];

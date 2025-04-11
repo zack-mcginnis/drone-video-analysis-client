@@ -5,26 +5,49 @@ import RecordingsList from './components/RecordingsList';
 import LandingPage from './components/LandingPage';
 import Navigation from './components/Navigation';
 import LiveStreamInfo from './components/LiveStreamInfo';
-import { setupApiAuth } from './services/api';
+import Devices from './components/Devices';
+import DeviceSelector from './components/DeviceSelector';
+import { setupApiAuth, postLogin } from './services/api';
 import './App.css';
 import { FaVideo } from 'react-icons/fa';
 
 function App() {
-  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, isLoading, getAccessTokenSilently, user } = useAuth0();
   const [activeSection, setActiveSection] = useState('live');
   const [selectedRecording, setSelectedRecording] = useState(null);
   const [isLiveMode, setIsLiveMode] = useState(true);
+  const [devices, setDevices] = useState([]);
+  const [selectedDevice, setSelectedDevice] = useState(null);
   const [streamState, setStreamState] = useState({
     isActive: false,
     lastUpdate: Date.now()
   });
 
-  // Initialize API authentication when the app loads
+  // Initialize API authentication and handle post-login
   useEffect(() => {
-    if (isAuthenticated) {
-      setupApiAuth(getAccessTokenSilently);
-    }
-  }, [isAuthenticated, getAccessTokenSilently]);
+    const initializeAuth = async () => {
+      if (isAuthenticated && user) {
+        // Setup API authentication
+        await setupApiAuth(getAccessTokenSilently);
+        
+        // Make post-login API call
+        try {
+          const response = await postLogin(user.email, user.sub);
+          if (response.data && response.data.devices) {
+            setDevices(response.data.devices);
+            // Set the first device as selected by default
+            if (response.data.devices.length > 0) {
+              setSelectedDevice(response.data.devices[0]);
+            }
+          }
+        } catch (error) {
+          console.error('Error in post-login:', error);
+        }
+      }
+    };
+
+    initializeAuth();
+  }, [isAuthenticated, getAccessTokenSilently, user]);
 
   const handleRecordingSelect = (recording) => {
     setSelectedRecording(recording);
@@ -60,6 +83,38 @@ function App() {
     }
   };
 
+  const handleDeviceAdded = (newDevice) => {
+    setDevices(prevDevices => {
+      const updatedDevices = [...prevDevices, newDevice];
+      // If this is the first device, set it as selected
+      if (updatedDevices.length === 1) {
+        setSelectedDevice(newDevice);
+      }
+      return updatedDevices;
+    });
+  };
+
+  const handleDeviceDeleted = (deviceId) => {
+    setDevices(prevDevices => {
+      const updatedDevices = prevDevices.filter(device => device.id !== deviceId);
+      // If the deleted device was selected, select the first available device
+      if (selectedDevice?.id === deviceId && updatedDevices.length > 0) {
+        setSelectedDevice(updatedDevices[0]);
+      } else if (updatedDevices.length === 0) {
+        setSelectedDevice(null);
+      }
+      return updatedDevices;
+    });
+  };
+
+  const handleDeviceSelect = (device) => {
+    setSelectedDevice(device);
+    setStreamState(prev => ({
+      ...prev,
+      lastUpdate: Date.now()
+    }));
+  };
+
   if (isLoading) {
     return (
       <div className="loading-screen">
@@ -79,10 +134,16 @@ function App() {
         return (
           <div className="live-section">
             <div className="live-content">
+              <DeviceSelector
+                devices={devices}
+                selectedDevice={selectedDevice}
+                onDeviceSelect={handleDeviceSelect}
+              />
               <div className="video-container">
                 <VideoPlayer 
                   isLiveMode={true}
                   selectedRecording={null}
+                  selectedDevice={selectedDevice}
                   onSwitchToLive={handleSwitchToLive}
                   onStreamStateChange={handleStreamStateChange}
                 />
@@ -99,6 +160,7 @@ function App() {
                 <VideoPlayer 
                   isLiveMode={isLiveMode}
                   selectedRecording={selectedRecording}
+                  selectedDevice={selectedDevice}
                   onSwitchToLive={handleSwitchToLive}
                   onStreamStateChange={handleStreamStateChange}
                 />
@@ -115,6 +177,14 @@ function App() {
               streamState={streamState}
             />
           </div>
+        );
+      case 'devices':
+        return (
+          <Devices
+            devices={devices}
+            onDeviceAdded={handleDeviceAdded}
+            onDeviceDeleted={handleDeviceDeleted}
+          />
         );
       case 'user':
         return <div className="section-content">User Profile Coming Soon</div>;

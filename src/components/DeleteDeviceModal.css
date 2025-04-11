@@ -1,0 +1,39 @@
+.delete-modal {
+  max-width: 450px;
+}
+
+.delete-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.warning-icon {
+  color: #dc3545;
+  font-size: 1.5rem;
+}
+
+.delete-content {
+  margin: 1.5rem 0;
+}
+
+.delete-content p {
+  margin: 0;
+  line-height: 1.5;
+  color: #333;
+}
+
+.warning-text {
+  margin-top: 1rem !important;
+  color: #666 !important;
+  font-size: 0.9rem;
+}
+
+.button.danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.button.danger:hover:not(:disabled) {
+  background-color: #c82333;
+} 
