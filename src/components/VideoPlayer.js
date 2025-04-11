@@ -4,7 +4,7 @@ import '../styles/VideoPlayer.css';
 // Import icons
 import { FaBroadcastTower } from 'react-icons/fa';
 
-const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchToLive, onStreamStateChange }) => {
+const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchToLive, onStreamStateChange, isAdmin }) => {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -56,6 +56,12 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchTo
         const device_key = selectedDevice?.stream_key;
         if (isLiveMode && !device_key) {
           setError('No device selected');
+          setIsLoading(false);
+          return;
+        }
+
+        if (isLiveMode && !isAdmin) {
+          setError('Live streaming is not available for demo users');
           setIsLoading(false);
           return;
         }
@@ -199,7 +205,7 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchTo
     return () => {
       destroyPlayer();
     };
-  }, [isLiveMode, selectedRecording, selectedDevice, hlsUrl, onStreamStateChange]);
+  }, [isLiveMode, selectedRecording, selectedDevice, hlsUrl, onStreamStateChange, isAdmin]);
 
   return (
     <div className="video-player-container">

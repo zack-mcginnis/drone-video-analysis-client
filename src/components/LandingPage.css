@@ -1,10 +1,35 @@
 .landing-page {
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     padding: 2rem;
+    position: relative;
+}
+
+.login-container {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 10;
+}
+
+.login-container button {
+    background: linear-gradient(135deg, #00b4d8, #0077b6);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.2);
+}
+
+.login-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 180, 216, 0.3);
 }
 
 .landing-content {
@@ -12,6 +37,8 @@
     width: 100%;
     text-align: center;
     animation: fadeIn 1s ease-out;
+    margin: 0 auto;
+    padding-top: 2rem;
 }
 
 @keyframes fadeIn {
@@ -27,7 +54,7 @@
 
 .landing-content h1 {
     font-size: 3.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     background: linear-gradient(135deg, #00b4d8, #0077b6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -37,72 +64,247 @@
 .subtitle {
     font-size: 1.5rem;
     color: #a0a0a0;
-    margin-bottom: 4rem;
-}
-
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
-}
-
-.feature {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
-    border-radius: 15px;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.feature:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    display: inline-block;
-}
-
-.feature h3 {
-    color: #ffffff;
-    font-size: 1.5rem;
     margin-bottom: 1rem;
 }
 
-.feature p {
-    color: #a0a0a0;
-    line-height: 1.6;
+.github-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
-.cta {
-    margin-top: 3rem;
-}
-
-.cta button {
-    background: linear-gradient(135deg, #00b4d8, #0077b6);
-    color: white;
-    border: none;
-    padding: 1rem 2.5rem;
+.github-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #00b4d8;
+    text-decoration: none;
     font-size: 1.1rem;
-    border-radius: 30px;
-    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    background: rgba(0, 180, 216, 0.1);
+    border: 1px solid rgba(0, 180, 216, 0.2);
+}
+
+.github-links a:hover {
+    color: #ffffff;
+    background: rgba(0, 180, 216, 0.2);
+    transform: translateY(-2px);
+}
+
+/* How It Works section */
+.how-it-works {
+    margin: 1rem 0;
+    padding: 2rem;
+    background: rgba(0, 180, 216, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 180, 216, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.how-it-works:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 180, 216, 0.15);
+}
+
+.how-it-works h2 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #00b4d8, #0077b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 600;
 }
 
-.cta button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
-.login-hint {
+.step {
+    padding: 1.5rem;
+    background: rgba(0, 180, 216, 0.05);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.step:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 180, 216, 0.1);
+}
+
+.step-icon {
+    font-size: 2.5rem;
+    color: #00b4d8;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.step:hover .step-icon {
+    transform: scale(1.1);
+}
+
+.step h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.step p {
     color: #a0a0a0;
-    margin-top: 1rem;
-    font-size: 0.9rem;
+    line-height: 1.6;
+    font-size: 1.1rem;
 }
 
+.how-it-works-note {
+    color: #a0a0a0;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 180, 216, 0.2);
+}
+
+/* Use Cases section */
+.use-cases {
+    margin: 1rem 0;
+    padding: 2rem;
+    background: rgba(0, 180, 216, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 180, 216, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.use-cases:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 180, 216, 0.15);
+}
+
+.use-cases h2 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #00b4d8, #0077b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+.cases {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.case {
+    padding: 1.5rem;
+    background: rgba(0, 180, 216, 0.05);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.case:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 180, 216, 0.1);
+}
+
+.case-icon {
+    font-size: 2.5rem;
+    color: #00b4d8;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.case:hover .case-icon {
+    transform: scale(1.1);
+}
+
+.case h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.case p {
+    color: #a0a0a0;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Unified card styling for all sections */
+.security-highlight, .features {
+    margin: 1rem 0;
+    padding: 2rem;
+    background: rgba(0, 180, 216, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 180, 216, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.security-highlight:hover, .features:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 180, 216, 0.15);
+}
+
+/* Unified heading styles */
+.security-feature h3, .feature h3 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #00b4d8, #0077b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+/* Unified text styles */
+.security-feature p, .feature p {
+    color: #a0a0a0;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Unified icon styles */
+.security-icon, .feature-icon {
+    font-size: 2.5rem;
+    color: #00b4d8;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.security-icon:hover, .feature-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Grid layouts */
+.security-highlight, .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.security-feature, .feature {
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.security-feature:hover, .feature:hover {
+    transform: translateY(-5px);
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
     .landing-content h1 {
         font-size: 2.5rem;
@@ -110,15 +312,51 @@
 
     .subtitle {
         font-size: 1.2rem;
-        margin-bottom: 3rem;
     }
 
-    .features {
+    .security-highlight, .features, .how-it-works, .use-cases {
+        padding: 1.5rem;
+    }
+
+    .security-feature h3, .feature h3, .how-it-works h2, .use-cases h2 {
+        font-size: 1.8rem;
+    }
+
+    .security-highlight, .features, .steps, .cases {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 
-    .feature {
-        padding: 1.5rem;
+    .github-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .github-links a {
+        padding: 0.7rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .login-container {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .login-container button {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .step, .case {
+        padding: 1.2rem;
+    }
+
+    .step h3, .case h3 {
+        font-size: 1.3rem;
+    }
+
+    .step p, .case p {
+        font-size: 1rem;
     }
 } 

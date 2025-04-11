@@ -1,4 +1,4 @@
-# Drone Video Analysis Client
+# Dronehub Client
 
 A React-based web application for streaming and analyzing drone video footage using HLS (HTTP Live Streaming). Connect to any custom backend to view your live or recorded video data. This removes the dependency on a potentially untrusted 3rd party (e.g. DJI, Youtube, etc...) to store and access your video data.
 

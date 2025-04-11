@@ -7,6 +7,7 @@ import Navigation from './components/Navigation';
 import LiveStreamInfo from './components/LiveStreamInfo';
 import Devices from './components/Devices';
 import DeviceSelector from './components/DeviceSelector';
+import DemoWelcomeModal from './components/DemoWelcomeModal';
 import { setupApiAuth, postLogin } from './services/api';
 import './App.css';
 import { FaVideo } from 'react-icons/fa';
@@ -18,6 +19,8 @@ function App() {
   const [isLiveMode, setIsLiveMode] = useState(true);
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showDemoWelcome, setShowDemoWelcome] = useState(false);
   const [streamState, setStreamState] = useState({
     isActive: false,
     lastUpdate: Date.now()
@@ -33,11 +36,18 @@ function App() {
         // Make post-login API call
         try {
           const response = await postLogin(user.email, user.sub);
-          if (response.data && response.data.devices) {
-            setDevices(response.data.devices);
-            // Set the first device as selected by default
-            if (response.data.devices.length > 0) {
-              setSelectedDevice(response.data.devices[0]);
+          if (response?.data) {
+            const isUserAdmin = response.data.is_admin || false;
+            setIsAdmin(isUserAdmin);
+            if (!isUserAdmin) {
+              setShowDemoWelcome(true);
+            }
+            if (response.data.devices) {
+              setDevices(response.data.devices);
+              // Set the first device as selected by default
+              if (response.data.devices.length > 0) {
+                setSelectedDevice(response.data.devices[0]);
+              }
             }
           }
         } catch (error) {
@@ -48,6 +58,10 @@ function App() {
 
     initializeAuth();
   }, [isAuthenticated, getAccessTokenSilently, user]);
+
+  const handleCloseDemoWelcome = () => {
+    setShowDemoWelcome(false);
+  };
 
   const handleRecordingSelect = (recording) => {
     setSelectedRecording(recording);
@@ -146,6 +160,7 @@ function App() {
                   selectedDevice={selectedDevice}
                   onSwitchToLive={handleSwitchToLive}
                   onStreamStateChange={handleStreamStateChange}
+                  isAdmin={isAdmin}
                 />
               </div>
               <LiveStreamInfo streamState={streamState} />
@@ -163,6 +178,7 @@ function App() {
                   selectedDevice={selectedDevice}
                   onSwitchToLive={handleSwitchToLive}
                   onStreamStateChange={handleStreamStateChange}
+                  isAdmin={isAdmin}
                 />
               </div>
             ) : (
@@ -197,6 +213,7 @@ function App() {
 
   return (
     <div className="App">
+      {showDemoWelcome && <DemoWelcomeModal onClose={handleCloseDemoWelcome} />}
       <Navigation 
         activeSection={activeSection}
         onSectionChange={handleSectionChange}

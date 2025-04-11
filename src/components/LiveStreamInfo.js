@@ -1,9 +1,21 @@
 import React from 'react';
-import { FaSignal, FaClock, FaVideo, FaCircle } from 'react-icons/fa';
+import { FaSignal, FaClock, FaVideo, FaCircle, FaLock } from 'react-icons/fa';
 import './LiveStreamInfo.css';
 
-const LiveStreamInfo = ({ streamState }) => {
+const LiveStreamInfo = ({ streamState, isAdmin }) => {
     const startTime = new Date().toLocaleTimeString();
+
+    if (!isAdmin) {
+        return (
+            <div className="live-stream-info">
+                <div className="demo-restriction-message">
+                    <FaLock className="lock-icon" />
+                    <h3>Demo User Access</h3>
+                    <p>Live streaming is not available for demo users. Please contact your administrator to upgrade your account for full access to live streaming features.</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="live-stream-info">

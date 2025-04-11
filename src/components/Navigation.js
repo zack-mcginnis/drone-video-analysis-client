@@ -23,7 +23,7 @@ const Navigation = ({ activeSection, onSectionChange }) => {
     return (
         <nav className="navigation">
             <div className="nav-brand">
-                <h2>Drone Video Analysis</h2>
+                <h2>Dronehub</h2>
                 <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
                     {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
                 </button>
