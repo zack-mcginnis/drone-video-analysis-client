@@ -2,6 +2,18 @@
   "name": "drone-video-client",
   "version": "0.1.0",
   "private": true,
+  "keywords": [
+    "drone",
+    "video-analysis",
+    "video-processing",
+    "react",
+    "hls",
+    "streaming",
+    "computer-vision",
+    "aerial-video",
+    "video-client",
+    "web-application"
+  ],
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
     "@testing-library/jest-dom": "^5.16.5",

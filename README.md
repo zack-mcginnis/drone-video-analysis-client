@@ -1,6 +1,6 @@
 # Drone Video Analysis Client
 
-A React-based web application for streaming and analyzing drone video footage using HLS (HTTP Live Streaming).
+A React-based web application for streaming and analyzing drone video footage using HLS (HTTP Live Streaming). Connect to any custom backend to view your live or recorded video data. This removes the dependency on a potentially untrusted 3rd party (e.g. DJI, Youtube, etc...) to store and access your video data.
 
 ## Features
 
@@ -33,7 +33,7 @@ A React-based web application for streaming and analyzing drone video footage us
    ```
    cp .env.example .env
    ```
-   - Update the `REACT_APP_HLS_STREAM_URL` in the `.env` file to point to the server hosting your HLS stream
+   - Update .env variables to match your backend configuration
 
 ## Running the Application
 
