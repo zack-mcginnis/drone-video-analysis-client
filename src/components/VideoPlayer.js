@@ -4,7 +4,7 @@ import '../styles/VideoPlayer.css';
 // Import icons
 import { FaBroadcastTower } from 'react-icons/fa';
 
-const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchToLive, onStreamStateChange, isAdmin, getAccessTokenSilently }) => {
+const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchToLive, onStreamStateChange, isAdmin }) => {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -17,25 +17,6 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchTo
   const playAttemptRef = useRef(0);
   const streamStateRef = useRef(false);
   const [isCurrentSegmentLive, setIsCurrentSegmentLive] = useState(false);
-  const [authToken, setAuthToken] = useState(null);
-
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const token = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-            scope: 'openid profile email'
-          }
-        });
-        setAuthToken(token);
-      } catch (error) {
-        console.error('Error getting access token:', error);
-        setError('Authentication error');
-      }
-    };
-    getToken();
-  }, [getAccessTokenSilently]);
 
   const attemptPlay = async () => {
     const video = videoRef.current;
@@ -60,7 +41,7 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchTo
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !authToken) return;
+    if (!video) return;
 
     let hls;
     let isDestroyed = false;
@@ -108,10 +89,7 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchTo
             fragLoadingRetryDelay: 500,
             manifestLoadingMaxRetry: 6,
             manifestLoadingRetryDelay: 500,
-            debug: true,
-            xhrSetup: (xhr, url) => {
-              xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
-            }
+            debug: true
           });
 
           hlsRef.current = hls;
@@ -246,7 +224,7 @@ const VideoPlayer = ({ isLiveMode, selectedRecording, selectedDevice, onSwitchTo
     return () => {
       destroyPlayer();
     };
-  }, [isLiveMode, selectedRecording, selectedDevice, hlsUrl, onStreamStateChange, isAdmin, authToken]);
+  }, [isLiveMode, selectedRecording, selectedDevice, hlsUrl, onStreamStateChange, isAdmin]);
 
   return (
     <div className="video-player-container">

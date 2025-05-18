@@ -161,7 +161,6 @@ function App() {
                   onSwitchToLive={handleSwitchToLive}
                   onStreamStateChange={handleStreamStateChange}
                   isAdmin={isAdmin}
-                  getAccessTokenSilently={getAccessTokenSilently}
                 />
               </div>
               <LiveStreamInfo streamState={streamState} isAdmin={isAdmin} />
@@ -180,7 +179,6 @@ function App() {
                   onSwitchToLive={handleSwitchToLive}
                   onStreamStateChange={handleStreamStateChange}
                   isAdmin={isAdmin}
-                  getAccessTokenSilently={getAccessTokenSilently}
                 />
               </div>
             ) : (
